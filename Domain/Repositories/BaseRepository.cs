@@ -24,14 +24,18 @@ namespace Domain.Repositories
             throw new System.NotImplementedException();
         }
 
-        public virtual bool RemoveEntity(TEntity entity)
+        public virtual bool RemoveEntity(int id)
         {
-            if (entity == null)
+            try
+            {
+                TEntity entity = GetEntity(id);
+                context.Set<TEntity>().Remove(entity);
+                return true;
+            }
+            catch
             {
                 return false;
             }
-            context.Set<TEntity>().Remove(entity);
-            return true;
         }
 
         public virtual bool AddEntity(TEntity entity)

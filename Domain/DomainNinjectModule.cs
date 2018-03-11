@@ -16,8 +16,8 @@ namespace Domain
         }
         public override void Load()
         {
-            Bind(typeof(IBaseRepository<>)).To(typeof(BaseRepository<>));
             Bind<MusicLibraryContext>().ToSelf();
+            Bind(typeof(IBaseRepository<>)).To(typeof(BaseRepository<>));
             Bind<IAlbumRepository>().To<AlbumRepository>();
             Bind<IGenreRepository>().To<GenreRepository>();
             Bind<ICompositionRepository>().To<CompositionRepository>();

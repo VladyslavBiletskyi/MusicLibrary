@@ -30,11 +30,6 @@ namespace Domain.Repositories
             return true;
         }
 
-        public override bool RemoveEntity(Performer entity)
-        {
-            return entity == null;
-        }
-
         public void RemovePerformerWithChildItems(Performer performer)
         {
             var albums = performer.Albums;
@@ -42,7 +37,7 @@ namespace Domain.Repositories
                 album.Compositions.Where(composition => composition.Albums.All(x => x.Performer == performer)));
             RemoveOtherEntities(compositions);
             RemoveOtherEntities(albums);
-            base.RemoveEntity(performer);
+            RemoveEntity(performer.Id);
             SaveChanges();
         }
     }

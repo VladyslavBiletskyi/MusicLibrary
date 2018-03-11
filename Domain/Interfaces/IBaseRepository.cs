@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using Domain.Entities;
 
 namespace Domain.Interfaces
@@ -10,7 +9,7 @@ namespace Domain.Interfaces
 
         bool UpdateEntity(int id, TEntity newValue);
 
-        bool RemoveEntity(TEntity entity);
+        bool RemoveEntity(int id);
 
         bool AddEntity(TEntity entity);
 

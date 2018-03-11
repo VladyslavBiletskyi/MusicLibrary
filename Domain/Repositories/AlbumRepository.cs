@@ -33,17 +33,12 @@ namespace Domain.Repositories
             return true;
         }
 
-        public override bool RemoveEntity(Album entity)
-        {
-            return entity == null;
-        }
-
         public void RemoveAlbumWithCompositions(Album entity)
         {
             var compositions = entity.Compositions.Where(composition =>
                 composition.Albums.Count == 1 && composition.Albums.First() == entity);
             RemoveOtherEntities(compositions);
-            base.RemoveEntity(entity);
+            RemoveEntity(entity.Id);
             SaveChanges();
         }
     }
