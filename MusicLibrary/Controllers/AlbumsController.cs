@@ -20,6 +20,7 @@ namespace MusicLibrary.Controllers
         }
 
         // GET: Album
+        [Route("")]
         public ActionResult Search()
         {
             return View();
@@ -33,7 +34,7 @@ namespace MusicLibrary.Controllers
             {
                 return View(album);
             }
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Search", "Albums");
         }
 
         // GET: Album/Create
@@ -62,11 +63,12 @@ namespace MusicLibrary.Controllers
                     throw new InvalidOperationException("Error during album creation");
                 }
 
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Search", "Albums");
             }
             catch
             {
-                return RedirectToAction("Index", "Home");
+                ViewBag.Error = "Error during album creation";
+                return RedirectToAction("Create", "Albums");
             }
         }
 
@@ -78,7 +80,7 @@ namespace MusicLibrary.Controllers
             {
                 return View(album);
             }
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Search", "Albums");
         }
 
         // POST: Album/Edit/5
@@ -101,11 +103,12 @@ namespace MusicLibrary.Controllers
                     throw new InvalidOperationException("Error during album update");
                 }
 
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Search", "Albums");
             }
             catch
             {
-                return View();
+                ViewBag.Error = "Error during album editing";
+                return RedirectToAction("Search", "Albums");
             }
         }
 
@@ -117,7 +120,7 @@ namespace MusicLibrary.Controllers
             {
                 return View(album);
             }
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Search", "Albums");
         }
 
         // POST: Album/Delete/5
@@ -131,16 +134,13 @@ namespace MusicLibrary.Controllers
                 {
                     return View();
                 }
-                if (!albumRepository.RemoveEntity(album))
-                {
-                    throw new InvalidOperationException("Error during album deletion");
-                }
-
-                return RedirectToAction("Index");
+                albumRepository.RemoveAlbumWithCompositions(album) ;
+                return RedirectToAction("Search", "Albums");
             }
             catch
             {
-                return View();
+                ViewBag.Error = "Error during album deletion";
+                return RedirectToAction("Search", "Albums");
             }
         }
     }

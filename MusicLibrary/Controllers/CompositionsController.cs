@@ -1,4 +1,6 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Linq;
+using System.Web.Mvc;
 using Domain.Entities;
 using Domain.Interfaces;
 
@@ -7,14 +9,19 @@ namespace MusicLibrary.Controllers
     public class CompositionsController : Controller
     {
         private readonly ICompositionRepository compositionRepository;
+        private readonly IAlbumRepository albumRepository;
+        private readonly IGenreRepository genreRepository;
 
-        public CompositionsController(ICompositionRepository compositionRepository)
+        public CompositionsController(ICompositionRepository compositionRepository, IAlbumRepository albumRepository, IGenreRepository genreRepository)
         {
             this.compositionRepository = compositionRepository;
+            this.albumRepository = albumRepository;
+            this.genreRepository = genreRepository;
         }
 
         // GET: Compositions
-        public ActionResult Index()
+        [Route("")]
+        public ActionResult Search()
         {
             return View();
         }
@@ -25,9 +32,9 @@ namespace MusicLibrary.Controllers
             Composition composition = compositionRepository.GetEntity(id);
             if (composition != null)
             {
-                return View();
+                return View(composition);
             }
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Search", "Compositions");
         }
 
         // GET: Compositions/Create
@@ -42,13 +49,21 @@ namespace MusicLibrary.Controllers
         {
             try
             {
-                // TODO: Add insert logic here
-
-                return RedirectToAction("Index");
+                int[] albums = (int[])collection.GetValue("albums").RawValue;
+                var composition = new Composition
+                {
+                    Name = collection.GetValue("name").AttemptedValue,
+                    Albums = albumRepository.GetAll().Where(album => albums.Contains(album.Id)).ToList(),
+                    Genre = genreRepository.GetEntity(int.Parse(collection.GetValue("genre").AttemptedValue)),
+                    Text = collection.GetValue("text").AttemptedValue
+                };
+                compositionRepository.AddEntity(composition);
+                return RedirectToAction("Search", "Compositions");
             }
             catch
             {
-                return View();
+                ViewBag.Error = "Error during composition creation";
+                return RedirectToAction("Search", "Compositions");
             }
         }
 
@@ -58,9 +73,9 @@ namespace MusicLibrary.Controllers
             Composition composition = compositionRepository.GetEntity(id);
             if (composition != null)
             {
-                return View();
+                return View(composition);
             }
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Search", "Compositions");
         }
 
         // POST: Compositions/Edit/5
@@ -69,13 +84,21 @@ namespace MusicLibrary.Controllers
         {
             try
             {
-                // TODO: Add update logic here
-
-                return RedirectToAction("Index");
+                Composition composition = compositionRepository.GetEntity(id);
+                if (composition != null)
+                {
+                    int[] albums = (int[])collection.GetValue("albums").RawValue;
+                    composition.Name = collection.GetValue("name").AttemptedValue;
+                    composition.Albums = albumRepository.GetAll().Where(album => albums.Contains(album.Id)).ToList();
+                    composition.Genre = genreRepository.GetEntity(int.Parse(collection.GetValue("genre").AttemptedValue));
+                    composition.Text = collection.GetValue("text").AttemptedValue;
+                }
+                return RedirectToAction("Search", "Compositions");
             }
             catch
             {
-                return View();
+                ViewBag.Error = "Error during composition editing";
+                return RedirectToAction("Search", "Compositions");
             }
         }
 
@@ -85,7 +108,7 @@ namespace MusicLibrary.Controllers
             Composition composition = compositionRepository.GetEntity(id);
             if (composition != null)
             {
-                return View();
+                return View(composition);
             }
             return RedirectToAction("Index", "Home");
         }
@@ -96,13 +119,20 @@ namespace MusicLibrary.Controllers
         {
             try
             {
-                // TODO: Add delete logic here
-
-                return RedirectToAction("Index");
+                Composition composition = compositionRepository.GetEntity(id);
+                if (composition != null)
+                {
+                    if (!compositionRepository.RemoveEntity(composition.Id))
+                    {
+                        throw new InvalidOperationException("Error during composition deletion");
+                    }
+                }
+                return RedirectToAction("Search", "Compositions");
             }
             catch
             {
-                return View();
+                ViewBag.Error = "Error during composition deletion";
+                return RedirectToAction("Search", "Compositions");
             }
         }
     }

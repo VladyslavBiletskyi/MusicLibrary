@@ -15,7 +15,8 @@ namespace MusicLibrary.Controllers
         }
 
         // GET: Genres
-        public ActionResult Index()
+        [Route("")]
+        public ActionResult Search()
         {
             return View();
         }
@@ -26,9 +27,9 @@ namespace MusicLibrary.Controllers
             Genre genre = genreRepository.GetEntity(id);
             if (genre != null)
             {
-                return View();
+                return View(genre);
             }
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Search", "Genres");
         }
 
         // GET: Genres/Create
@@ -54,11 +55,12 @@ namespace MusicLibrary.Controllers
                     throw new InvalidOperationException("Error during genre creation");
                 }
 
-                return RedirectToAction("Index");
+                return RedirectToAction("Search", "Genres");
             }
             catch
             {
-                return View();
+                ViewBag.Error = "Error during genre creation";
+                return RedirectToAction("Search", "Genres");
             }
         }
 
@@ -68,9 +70,9 @@ namespace MusicLibrary.Controllers
             Genre genre = genreRepository.GetEntity(id);
             if (genre != null)
             {
-                return View();
+                return View(genre);
             }
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Search", "Genres");
         }
 
         // POST: Genres/Edit/5
@@ -87,14 +89,15 @@ namespace MusicLibrary.Controllers
 
                 if (!genreRepository.UpdateEntity(id, genre))
                 {
-                    throw new InvalidOperationException("Error during genre creation");
+                    throw new InvalidOperationException("Error during genre editing");
                 }
 
-                return RedirectToAction("Index");
+                return RedirectToAction("Search", "Genres");
             }
             catch
             {
-                return View();
+                ViewBag.Error = "Error during genre editing";
+                return RedirectToAction("Search", "Genres");
             }
         }
 
@@ -104,9 +107,9 @@ namespace MusicLibrary.Controllers
             Genre genre = genreRepository.GetEntity(id);
             if (genre != null)
             {
-                return View();
+                return View(genre);
             }
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Search", "Genres");
         }
 
         // POST: Genres/Delete/5
@@ -115,13 +118,20 @@ namespace MusicLibrary.Controllers
         {
             try
             {
-                // TODO: Add delete logic here
-
-                return RedirectToAction("Index");
+                Genre genre = genreRepository.GetEntity(id);
+                if (genre != null)
+                {
+                    if (!genreRepository.RemoveEntity(genre.Id))
+                    {
+                        throw new InvalidOperationException("Error during genre deletion");
+                    }
+                }
+                return RedirectToAction("Search", "Genres");
             }
             catch
             {
-                return View();
+                ViewBag.Error = "Error during genre creation";
+                return RedirectToAction("Search", "Genres");
             }
         }
     }

@@ -1,4 +1,6 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Linq;
+using System.Web.Mvc;
 using Domain.Entities;
 using Domain.Interfaces;
 
@@ -7,14 +9,17 @@ namespace MusicLibrary.Controllers
     public class PerformersController : Controller
     {
         private readonly IPerformerRepository performerRepository;
+        private readonly IAlbumRepository albumRepository;
 
-        public PerformersController(IPerformerRepository performerRepository)
+        public PerformersController(IPerformerRepository performerRepository, IAlbumRepository albumRepository)
         {
             this.performerRepository = performerRepository;
+            this.albumRepository = albumRepository;
         }
 
         // GET: Performer
-        public ActionResult Index()
+        [Route("")]
+        public ActionResult Search()
         {
             return View();
         }
@@ -25,9 +30,9 @@ namespace MusicLibrary.Controllers
             Performer performer = performerRepository.GetEntity(id);
             if (performer != null)
             {
-                return View();
+                return View(performer);
             }
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Search", "Performers");
         }
 
         // GET: Performer/Create
@@ -42,13 +47,25 @@ namespace MusicLibrary.Controllers
         {
             try
             {
-                // TODO: Add insert logic here
+                int[] albums = (int[])collection.GetValue("albums").RawValue;
+                var performer = new Performer
+                {
+                    Name = collection.GetValue("name").AttemptedValue,
+                    DateOfBirth = DateTime.Parse(collection.GetValue("date").AttemptedValue),
+                    Albums = albumRepository.GetAll().Where(composition => albums.Contains(composition.Id)).ToList()
+                };
 
-                return RedirectToAction("Index");
+                if (!performerRepository.AddEntity(performer))
+                {
+                    throw new InvalidOperationException("Error during performer creation");
+                }
+
+                return RedirectToAction("Search", "Performers");
             }
             catch
             {
-                return View();
+                ViewBag.Error = "Error during performer creation";
+                return RedirectToAction("Create", "Performers");
             }
         }
 
@@ -58,9 +75,9 @@ namespace MusicLibrary.Controllers
             Performer performer = performerRepository.GetEntity(id);
             if (performer != null)
             {
-                return View();
+                return View(performer);
             }
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Search", "Performers");
         }
 
         // POST: Performer/Edit/5
@@ -69,13 +86,25 @@ namespace MusicLibrary.Controllers
         {
             try
             {
-                // TODO: Add update logic here
+                int[] albums = (int[])collection.GetValue("albums").RawValue;
+                var performer = new Performer
+                {
+                    Name = collection.GetValue("name").AttemptedValue,
+                    DateOfBirth = DateTime.Parse(collection.GetValue("date").AttemptedValue),
+                    Albums = albumRepository.GetAll().Where(composition => albums.Contains(composition.Id)).ToList()
+                };
 
-                return RedirectToAction("Index");
+                if (!performerRepository.UpdateEntity(performer.Id, performer))
+                {
+                    throw new InvalidOperationException("Error during performer editing");
+                }
+
+                return RedirectToAction("Search", "Performers");
             }
             catch
             {
-                return View();
+                ViewBag.Error = "Error during performer editing";
+                return RedirectToAction("Edit", "Performers");
             }
         }
 
@@ -85,9 +114,9 @@ namespace MusicLibrary.Controllers
             Performer performer = performerRepository.GetEntity(id);
             if (performer != null)
             {
-                return View();
+                return View(performer);
             }
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Search", "Performers");
         }
 
         // POST: Performer/Delete/5
@@ -96,13 +125,17 @@ namespace MusicLibrary.Controllers
         {
             try
             {
-                // TODO: Add delete logic here
-
-                return RedirectToAction("Index");
+                Performer performer = performerRepository.GetEntity(id);
+                if (performer != null)
+                {
+                    performerRepository.RemovePerformerWithChildItems(performer);
+                }
+                return RedirectToAction("Search", "Performers");
             }
             catch
             {
-                return View();
+                ViewBag.Error = "Error during performer deletion";
+                return RedirectToAction("Search", "Performers");
             }
         }
     }
