@@ -30,6 +30,7 @@ namespace Domain.Repositories
             {
                 TEntity entity = GetEntity(id);
                 context.Set<TEntity>().Remove(entity);
+                SaveChanges();
                 return true;
             }
             catch
@@ -45,6 +46,7 @@ namespace Domain.Repositories
                 return false;
             }
             context.Set<TEntity>().Add(entity);
+            SaveChanges();
             return true;
         }
 
