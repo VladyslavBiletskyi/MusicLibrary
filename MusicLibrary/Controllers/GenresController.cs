@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Linq;
 using System.Web.Mvc;
 using Domain.Entities;
 using Domain.Interfaces;
 
 namespace MusicLibrary.Controllers
 {
-    public class GenresController : Controller
+    public class GenresController : BaseCrudController
     {
         private readonly IGenreRepository genreRepository;
 
@@ -14,11 +15,10 @@ namespace MusicLibrary.Controllers
             this.genreRepository = genreRepository;
         }
 
-        // GET: Genres
-        [Route("")]
-        public ActionResult Search()
+        public override ActionResult SearchByStartPart(string searchPart)
         {
-            return View();
+            var instances = genreRepository.GetAll().Where(genre => genre.Name.StartsWith(searchPart));
+            return View("SearchResults", instances);
         }
 
         // GET: Genres/Details/5
@@ -30,12 +30,6 @@ namespace MusicLibrary.Controllers
                 return View(genre);
             }
             return RedirectToAction("Search", "Genres");
-        }
-
-        // GET: Genres/Create
-        public ActionResult Create()
-        {
-            return View();
         }
 
         // POST: Genres/Create

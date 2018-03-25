@@ -6,7 +6,7 @@ using Domain.Interfaces;
 
 namespace MusicLibrary.Controllers
 {
-    public class PerformersController : Controller
+    public class PerformersController : BaseCrudController
     {
         private readonly IPerformerRepository performerRepository;
         private readonly IAlbumRepository albumRepository;
@@ -15,13 +15,6 @@ namespace MusicLibrary.Controllers
         {
             this.performerRepository = performerRepository;
             this.albumRepository = albumRepository;
-        }
-
-        // GET: Performer
-        [Route("")]
-        public ActionResult Search()
-        {
-            return View();
         }
 
         // GET: Performer/Details/5
@@ -33,12 +26,6 @@ namespace MusicLibrary.Controllers
                 return View(performer);
             }
             return RedirectToAction("Search", "Performers");
-        }
-
-        // GET: Performer/Create
-        public ActionResult Create()
-        {
-            return View();
         }
 
         // POST: Performer/Create
@@ -137,6 +124,12 @@ namespace MusicLibrary.Controllers
                 ViewBag.Error = "Error during performer deletion";
                 return RedirectToAction("Search", "Performers");
             }
+        }
+
+        public override ActionResult SearchByStartPart(string searchPart)
+        {
+            var instances = performerRepository.GetAll().Where(performer => performer.Name.StartsWith(searchPart));
+            return View("SearchResults", instances);
         }
     }
 }

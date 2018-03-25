@@ -6,7 +6,7 @@ using Domain.Interfaces;
 
 namespace MusicLibrary.Controllers
 {
-    public class CompositionsController : Controller
+    public class CompositionsController : BaseCrudController
     {
         private readonly ICompositionRepository compositionRepository;
         private readonly IAlbumRepository albumRepository;
@@ -19,11 +19,10 @@ namespace MusicLibrary.Controllers
             this.genreRepository = genreRepository;
         }
 
-        // GET: Compositions
-        [Route("")]
-        public ActionResult Search()
+        public override ActionResult SearchByStartPart(string searchPart)
         {
-            return View();
+            var instances = compositionRepository.GetAll().Where(performer => performer.Name.StartsWith(searchPart));
+            return View("SearchResults", instances);
         }
 
         // GET: Compositions/Details/5
@@ -35,12 +34,6 @@ namespace MusicLibrary.Controllers
                 return View(composition);
             }
             return RedirectToAction("Search", "Compositions");
-        }
-
-        // GET: Compositions/Create
-        public ActionResult Create()
-        {
-            return View();
         }
 
         // POST: Compositions/Create
