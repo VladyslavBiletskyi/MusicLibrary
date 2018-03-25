@@ -1,0 +1,24 @@
+﻿@model IEnumerable<Domain.Entities.BaseEntity>
+@{
+    ViewBag.Title = "SearchResults";
+}
+<div class="row">
+    <div class="col-md-12">
+        @if (Model.Any())
+        {
+            foreach (var instance in Model)
+            {
+                @Html.ActionLink(instance.Name, "Details", new RouteValueDictionary{{"id", instance.Id}})
+            }
+        }
+        else
+        {
+            <h2>No results found</h2>
+        }
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        @Html.ActionLink("Go Back", "Search", null, new Dictionary<string, object> { { "class", "btn btn-primary btn-lg" } })
+    </div>
+</div>
