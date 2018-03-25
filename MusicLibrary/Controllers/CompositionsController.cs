@@ -42,7 +42,7 @@ namespace MusicLibrary.Controllers
         {
             try
             {
-                int[] albums = (int[])collection.GetValue("albums").RawValue;
+                int[] albums = new [] {int.Parse(collection.GetValue("albums").AttemptedValue) };
                 var composition = new Composition
                 {
                     Name = collection.GetValue("name").AttemptedValue,
@@ -80,7 +80,7 @@ namespace MusicLibrary.Controllers
                 Composition composition = compositionRepository.GetEntity(id);
                 if (composition != null)
                 {
-                    int[] albums = (int[])collection.GetValue("albums").RawValue;
+                    int[] albums = new[] { int.Parse(collection.GetValue("albums").AttemptedValue) };
                     composition.Name = collection.GetValue("name").AttemptedValue;
                     composition.Albums = albumRepository.GetAll().Where(album => albums.Contains(album.Id)).ToList();
                     composition.Genre = genreRepository.GetEntity(int.Parse(collection.GetValue("genre").AttemptedValue));

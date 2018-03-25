@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using Domain.Entities;
@@ -23,9 +24,15 @@ namespace MusicLibrary.Controllers
             Performer performer = performerRepository.GetEntity(id);
             if (performer != null)
             {
-                return View(performer);
+                return View("Details", performer);
             }
             return RedirectToAction("Search", "Performers");
+        }
+
+        [HttpPost]
+        public ActionResult GetAllPerformersOption()
+        {
+            return PartialView("AllPerformersList", performerRepository.GetAll().ToList());
         }
 
         // POST: Performer/Create
@@ -34,12 +41,10 @@ namespace MusicLibrary.Controllers
         {
             try
             {
-                int[] albums = (int[])collection.GetValue("albums").RawValue;
                 var performer = new Performer
                 {
                     Name = collection.GetValue("name").AttemptedValue,
-                    DateOfBirth = DateTime.Parse(collection.GetValue("date").AttemptedValue),
-                    Albums = albumRepository.GetAll().Where(composition => albums.Contains(composition.Id)).ToList()
+                    DateOfBirth = DateTime.Parse(collection.GetValue("dateOfBirth").AttemptedValue)
                 };
 
                 if (!performerRepository.AddEntity(performer))
@@ -62,7 +67,7 @@ namespace MusicLibrary.Controllers
             Performer performer = performerRepository.GetEntity(id);
             if (performer != null)
             {
-                return View(performer);
+                return View("Edit", performer);
             }
             return RedirectToAction("Search", "Performers");
         }
@@ -73,15 +78,14 @@ namespace MusicLibrary.Controllers
         {
             try
             {
-                int[] albums = (int[])collection.GetValue("albums").RawValue;
                 var performer = new Performer
                 {
                     Name = collection.GetValue("name").AttemptedValue,
-                    DateOfBirth = DateTime.Parse(collection.GetValue("date").AttemptedValue),
-                    Albums = albumRepository.GetAll().Where(composition => albums.Contains(composition.Id)).ToList()
+                    DateOfBirth = DateTime.Parse(collection.GetValue("dateOfBirth").AttemptedValue),
+                    Albums = new List<Album>()
                 };
 
-                if (!performerRepository.UpdateEntity(performer.Id, performer))
+                if (!performerRepository.UpdateEntity(id, performer))
                 {
                     throw new InvalidOperationException("Error during performer editing");
                 }
@@ -101,7 +105,7 @@ namespace MusicLibrary.Controllers
             Performer performer = performerRepository.GetEntity(id);
             if (performer != null)
             {
-                return View(performer);
+                return View("Delete", performer);
             }
             return RedirectToAction("Search", "Performers");
         }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using Domain.Entities;
@@ -36,18 +37,23 @@ namespace MusicLibrary.Controllers
             return RedirectToAction("Search", "Albums");
         }
 
+        [HttpPost]
+        public ActionResult GetAllAlbumsOption()
+        {
+            return PartialView("AllAlbumsList", albumRepository.GetAll().ToList());
+        }
+
         // POST: Album/Create
         [HttpPost]
         public ActionResult Create(FormCollection collection)
         {
             try
             {
-                int[] compositions = (int[]) collection.GetValue("compositions").RawValue;
                 var album = new Album
                 {
                     Name = collection.GetValue("name").AttemptedValue,
-                    DateOfCreation = DateTime.Parse(collection.GetValue("date").AttemptedValue),
-                    Compositions = compositionRepository.GetAll().Where(composition => compositions.Contains(composition.Id)).ToList(),
+                    DateOfCreation = DateTime.Parse(collection.GetValue("dateOfCreation").AttemptedValue),
+                    Compositions = new List<Composition>(),
                     Performer = performerRepository.GetEntity(int.Parse(collection.GetValue("performer").AttemptedValue))
                 };
 
@@ -82,12 +88,10 @@ namespace MusicLibrary.Controllers
         {
             try
             {
-                int[] compositions = (int[])collection.GetValue("compositions").RawValue;
                 var album = new Album
                 {
                     Name = collection.GetValue("name").AttemptedValue,
-                    DateOfCreation = DateTime.Parse(collection.GetValue("date").AttemptedValue),
-                    Compositions = compositionRepository.GetAll().Where(composition => compositions.Contains(composition.Id)).ToList(),
+                    DateOfCreation = DateTime.Parse(collection.GetValue("dateOfCreation").AttemptedValue),
                     Performer = performerRepository.GetEntity(int.Parse(collection.GetValue("performer").AttemptedValue))
                 };
 

@@ -32,6 +32,12 @@ namespace MusicLibrary.Controllers
             return RedirectToAction("Search", "Genres");
         }
 
+        [HttpPost]
+        public ActionResult GetAllGenresOption()
+        {
+            return PartialView("AllGenresList", genreRepository.GetAll().ToList());
+        }
+
         // POST: Genres/Create
         [HttpPost]
         public ActionResult Create(FormCollection collection)
