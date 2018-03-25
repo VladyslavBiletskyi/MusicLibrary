@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using Domain.Entities;
 using Domain.Interfaces;
@@ -16,7 +17,23 @@ namespace Domain.Repositories
 
         public virtual TEntity GetEntity(int id)
         {
-            return context.Set<TEntity>().FirstOrDefault(x => x.Id == id);
+            var entity = context.Set<TEntity>().FirstOrDefault(x => x.Id == id);
+            if (entity == null)
+            {
+                return null;
+            }
+            else
+            {
+                var queryable = context.Set<TEntity>().AsQueryable();
+                foreach (var property in typeof(TEntity).GetProperties())
+                {
+                    if (property.GetGetMethod().ReturnType.BaseType == typeof(BaseEntity) || property.GetGetMethod().IsVirtual)
+                    {
+                        queryable = queryable.Include(property.Name);
+                    }
+                }
+                return queryable.FirstOrDefault(x => x.Id == id);
+            }
         }
 
         public virtual bool UpdateEntity(int id, TEntity newValue)

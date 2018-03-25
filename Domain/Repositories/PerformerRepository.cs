@@ -13,7 +13,7 @@ namespace Domain.Repositories
 
         public override IQueryable<Performer> GetAll()
         {
-            return base.GetAll().Include(x => x.Albums.SelectMany(album => album.Compositions)).Include(x => x.Albums.Select(album => album.Performer));
+            return base.GetAll().Include(x => x.Albums.Select(album => album.Compositions)).Include(x => x.Albums.Select(album => album.Performer));
         }
 
         public override bool UpdateEntity(int id, Performer newValue)
@@ -33,10 +33,13 @@ namespace Domain.Repositories
         public void RemovePerformerWithChildItems(Performer performer)
         {
             var albums = performer.Albums;
-            var compositions = albums.SelectMany(album =>
-                album.Compositions.Where(composition => composition.Albums.All(x => x.Performer == performer)));
-            RemoveOtherEntities(compositions);
-            RemoveOtherEntities(albums);
+            if (albums != null)
+            {
+                var compositions = albums.SelectMany(album =>
+                    album.Compositions.Where(composition => composition.Albums.All(x => x.Performer == performer)));
+                RemoveOtherEntities(compositions);
+                RemoveOtherEntities(albums);
+            }
             RemoveEntity(performer.Id);
             SaveChanges();
         }

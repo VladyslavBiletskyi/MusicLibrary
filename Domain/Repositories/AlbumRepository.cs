@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
+﻿using System.Data.Entity;
 using System.Linq;
 using Domain.Entities;
 using Domain.Interfaces;
