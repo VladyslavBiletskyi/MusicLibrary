@@ -1,0 +1,5 @@
+﻿@model IEnumerable<Domain.Entities.Album>
+    @foreach (var album in Model)
+    {
+        <option value="@album.Id">@album.Name</option>
+    }

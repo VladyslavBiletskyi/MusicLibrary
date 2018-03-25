@@ -1,0 +1,65 @@
+﻿@model Domain.Entities.Album
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Album</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Image)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Image)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DateOfCreation)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DateOfCreation)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        
+        <dt>
+            @Html.DisplayNameFor(model => model.Performer)
+        </dt>
+
+        <dd>
+            @Html.ActionLink(Model.Performer.Name, "Details", "Performers", new { id = Model.Performer.Id }, null)
+        </dd>
+        
+        <dt>
+            @Html.DisplayNameFor(model => model.Compositions):
+        </dt>
+        
+        <dd>
+            @if (Model.Compositions != null && Model.Compositions.Any())
+            {
+                foreach (var composition in Model.Compositions)
+                {
+                    @Html.ActionLink(composition.Name, "Details", "Compositions", new {id = composition.Id}, null)
+                }
+            }
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }, new { @class = "btn btn-primary btn-lg" })
+    @Html.ActionLink("Delete", "Delete", new { id = Model.Id }, new { @class = "btn btn-danger btn-lg" })
+    @Html.ActionLink("Back to List", "Search", new { @class = "btn btn-primary btn-lg" })
+</p>
