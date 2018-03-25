@@ -7,6 +7,6 @@ namespace Domain.Entities
     {
         public DateTime DateOfBirth { get; set; }
 
-        public ICollection<Album> Albums { get; set; }
+        public virtual ICollection<Album> Albums { get; set; }
     }
 }
