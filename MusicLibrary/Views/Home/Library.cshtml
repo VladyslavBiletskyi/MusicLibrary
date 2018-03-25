@@ -1,0 +1,14 @@
+﻿
+@{
+    ViewBag.Title = "Library";
+}
+<div class="jumbotron">
+    <h2>Library</h2>
+
+    <div class="col-md-12">
+        @Html.ActionLink("Albums", "Search", "Albums", null, new Dictionary<string, object> { { "class", "btn btn-primary btn-lg" } })
+        @Html.ActionLink("Compositions", "Search", "Compositions", null, new Dictionary<string, object> { { "class", "btn btn-primary btn-lg" } })
+        @Html.ActionLink("Performers", "Search", "Performers", null, new Dictionary<string, object> { { "class", "btn btn-primary btn-lg" } })
+        @Html.ActionLink("Genres", "Search", "Genres", null, new Dictionary<string, object> { { "class", "btn btn-primary btn-lg" } })
+    </div>
+</div>

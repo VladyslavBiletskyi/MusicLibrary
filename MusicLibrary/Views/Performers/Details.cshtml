@@ -35,7 +35,7 @@
             {
                 foreach (var album in Model.Albums)
                 {
-                    @Html.ActionLink(album.Name, "Details", "Albums", new {id = Model.Id}, null)
+                    @Html.ActionLink(album.Name, "Details", "Albums", new {id = album.Id}, null)
                 }
             }
         </dd>
@@ -43,7 +43,7 @@
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }, new Dictionary<string, object> { { "class", "btn btn-primary btn-lg" } })
-    @Html.ActionLink("Delete", "Delete", new { id = Model.Id }, new Dictionary<string, object> { { "class", "btn btn-primary btn-lg" } })
-    @Html.ActionLink("Back to List", "Search", new Dictionary<string, object> { { "class", "btn btn-primary btn-lg" } })
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }, new { @class = "btn btn-primary btn-lg"  })
+    @Html.ActionLink("Delete", "Delete", new { id = Model.Id }, new { @class = "btn btn-danger btn-lg" })
+    @Html.ActionLink("Back to List", "Search", new { @class = "btn btn-primary btn-lg" })
 </p>

@@ -1,0 +1,5 @@
+﻿@model IEnumerable<Domain.Entities.Genre>
+    @foreach (var genre in Model)
+    {
+        <option value="@genre.Id">@genre.Name</option>
+    }

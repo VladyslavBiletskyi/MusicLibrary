@@ -1,0 +1,5 @@
+﻿@model IEnumerable<Domain.Entities.Performer>
+    @foreach (var performer in Model)
+    {
+        <option value="@performer.Id">@performer.Name</option>
+    }
