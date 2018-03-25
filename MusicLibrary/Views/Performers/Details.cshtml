@@ -1,0 +1,49 @@
+﻿@model Domain.Entities.Performer
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Performer</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.DateOfBirth)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DateOfBirth)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        
+        <dt>
+            @Html.DisplayNameFor(model => model.Albums):
+        </dt>
+        
+        <dd>
+            @if (Model.Albums != null && Model.Albums.Any())
+            {
+                foreach (var album in Model.Albums)
+                {
+                    @Html.ActionLink(album.Name, "Details", "Albums", new {id = Model.Id}, null)
+                }
+            }
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }, new Dictionary<string, object> { { "class", "btn btn-primary btn-lg" } })
+    @Html.ActionLink("Delete", "Delete", new { id = Model.Id }, new Dictionary<string, object> { { "class", "btn btn-primary btn-lg" } })
+    @Html.ActionLink("Back to List", "Search", new Dictionary<string, object> { { "class", "btn btn-primary btn-lg" } })
+</p>
