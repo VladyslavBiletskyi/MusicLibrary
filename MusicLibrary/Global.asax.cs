@@ -16,6 +16,7 @@ namespace MusicLibrary
 
             DomainNinjectModule module = new DomainNinjectModule();
             module.Init();
+            DataAnnotationsModelValidatorProvider.AddImplicitRequiredAttributeForValueTypes = false;
         }
     }
 }

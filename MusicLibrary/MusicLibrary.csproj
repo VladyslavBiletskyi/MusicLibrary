@@ -46,6 +46,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.7\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
     </Reference>
@@ -146,6 +152,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AlbumsController.cs" />
+    <Compile Include="Controllers\BaseCrudController.cs" />
     <Compile Include="Controllers\CompositionsController.cs" />
     <Compile Include="Controllers\GenresController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -192,15 +199,39 @@
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Compositions\Search.cshtml" />
+    <Content Include="Views\Albums\Search.cshtml" />
+    <Content Include="Views\Performers\Search.cshtml" />
+    <Content Include="Views\Genres\Search.cshtml" />
+    <Content Include="Views\Albums\SearchResults.cshtml" />
+    <Content Include="Views\Compositions\SearchResults.cshtml" />
+    <Content Include="Views\Genres\SearchResults.cshtml" />
+    <Content Include="Views\Performers\SearchResults.cshtml" />
+    <Content Include="Views\Home\Library.cshtml" />
+    <Content Include="Views\Genres\Create.cshtml" />
+    <Content Include="Views\Genres\Details.cshtml" />
+    <Content Include="Views\Genres\Edit.cshtml" />
+    <Content Include="Views\Genres\Delete.cshtml" />
+    <Content Include="Views\Performers\Create.cshtml" />
+    <Content Include="Views\Performers\Edit.cshtml" />
+    <Content Include="Views\Performers\Delete.cshtml" />
+    <Content Include="Views\Performers\Details.cshtml" />
+    <Content Include="Views\Performers\AllPerformersList.cshtml" />
+    <Content Include="Views\Albums\Create.cshtml" />
+    <Content Include="Views\Albums\Details.cshtml" />
+    <Content Include="Views\Albums\Edit.cshtml" />
+    <Content Include="Views\Albums\Delete.cshtml" />
+    <Content Include="Views\Albums\AllAlbumsList.cshtml" />
+    <Content Include="Views\Compositions\Create.cshtml" />
+    <Content Include="Views\Genres\AllGenresList.cshtml" />
+    <Content Include="Views\Compositions\Details.cshtml" />
+    <Content Include="Views\Compositions\Edit.cshtml" />
+    <Content Include="Views\Compositions\Delete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Models\" />
-    <Folder Include="Views\Album\" />
     <Folder Include="Views\BaseCrud\" />
-    <Folder Include="Views\Compositions\" />
-    <Folder Include="Views\Genres\" />
-    <Folder Include="Views\Performer\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
