@@ -5,7 +5,7 @@ namespace Domain.Entities
 {
     public class Album : BaseEntity
     {
-        public string Image { get; set; }
+        public byte[] Image { get; set; }
 
         public DateTime DateOfCreation { get; set; }
 

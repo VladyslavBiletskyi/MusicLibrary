@@ -39,12 +39,22 @@ namespace MusicLibrary.Controllers
         [HttpPost]
         public ActionResult Create(FormCollection collection)
         {
+            var image = Request.Files["image"];
+            byte[] imageData = null;
+            if (image != null)
+            {
+                using (System.IO.BinaryReader br = new System.IO.BinaryReader(image.InputStream))
+                {
+                    imageData = br.ReadBytes(image.ContentLength);
+                }
+            }
             try
             {
                 var performer = new Performer
                 {
                     Name = collection.GetValue("name").AttemptedValue,
-                    DateOfBirth = DateTime.Parse(collection.GetValue("dateOfBirth").AttemptedValue)
+                    DateOfBirth = DateTime.Parse(collection.GetValue("dateOfBirth").AttemptedValue),
+                    Image = imageData
                 };
 
                 if (!performerRepository.AddEntity(performer))
@@ -76,13 +86,23 @@ namespace MusicLibrary.Controllers
         [HttpPost]
         public ActionResult Edit(int id, FormCollection collection)
         {
+            var image = Request.Files["image"];
+            byte[] imageData = null;
+            if (image != null)
+            {
+                using (System.IO.BinaryReader br = new System.IO.BinaryReader(image.InputStream))
+                {
+                    imageData = br.ReadBytes(image.ContentLength);
+                }
+            }
             try
             {
                 var performer = new Performer
                 {
                     Name = collection.GetValue("name").AttemptedValue,
                     DateOfBirth = DateTime.Parse(collection.GetValue("dateOfBirth").AttemptedValue),
-                    Albums = new List<Album>()
+                    Albums = new List<Album>(),
+                    Image = imageData
                 };
 
                 if (!performerRepository.UpdateEntity(id, performer))

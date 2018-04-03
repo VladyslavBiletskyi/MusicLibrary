@@ -26,7 +26,7 @@ namespace Domain.Repositories
             album.Compositions = newValue.Compositions;
             album.DateOfCreation = newValue.DateOfCreation;
             album.Name = newValue.Name;
-            album.Image = newValue.Image;
+            album.Image = newValue.Image ?? album.Image;
             SaveChanges();
             return true;
         }

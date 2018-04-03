@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web;
 using System.Web.Mvc;
 using Domain.Entities;
 using Domain.Interfaces;
@@ -47,6 +48,15 @@ namespace MusicLibrary.Controllers
         [HttpPost]
         public ActionResult Create(FormCollection collection)
         {
+            var image = Request.Files["image"];
+            byte[] imageData = null;
+            if (image != null)
+            {
+                using (System.IO.BinaryReader br = new System.IO.BinaryReader(image.InputStream))
+                {
+                    imageData = br.ReadBytes(image.ContentLength);
+                }
+            }
             try
             {
                 var album = new Album
@@ -54,7 +64,8 @@ namespace MusicLibrary.Controllers
                     Name = collection.GetValue("name").AttemptedValue,
                     DateOfCreation = DateTime.Parse(collection.GetValue("dateOfCreation").AttemptedValue),
                     Compositions = new List<Composition>(),
-                    Performer = performerRepository.GetEntity(int.Parse(collection.GetValue("performer").AttemptedValue))
+                    Performer = performerRepository.GetEntity(int.Parse(collection.GetValue("performer").AttemptedValue)),
+                    Image = imageData
                 };
 
                 if (!albumRepository.AddEntity(album))
@@ -86,15 +97,25 @@ namespace MusicLibrary.Controllers
         [HttpPost]
         public ActionResult Edit(int id, FormCollection collection)
         {
+            var image = Request.Files["image"];
+            byte[] imageData = null;
+            if (image != null)
+            {
+                using (System.IO.BinaryReader br = new System.IO.BinaryReader(image.InputStream))
+                {
+                    imageData = br.ReadBytes(image.ContentLength);
+                }
+            }
             try
             {
                 var album = new Album
                 {
                     Name = collection.GetValue("name").AttemptedValue,
                     DateOfCreation = DateTime.Parse(collection.GetValue("dateOfCreation").AttemptedValue),
-                    Performer = performerRepository.GetEntity(int.Parse(collection.GetValue("performer").AttemptedValue))
+                    Performer = performerRepository.GetEntity(int.Parse(collection.GetValue("performer").AttemptedValue)),
+                    Image = imageData
+                    
                 };
-
                 if (!albumRepository.UpdateEntity(id, album))
                 {
                     throw new InvalidOperationException("Error during album update");

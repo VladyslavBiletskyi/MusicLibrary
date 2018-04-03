@@ -26,6 +26,7 @@ namespace Domain.Repositories
             performer.Albums = newValue.Albums;
             performer.DateOfBirth = newValue.DateOfBirth;
             performer.Name = newValue.Name;
+            performer.Image = newValue.Image ?? performer.Image;
             SaveChanges();
             return true;
         }

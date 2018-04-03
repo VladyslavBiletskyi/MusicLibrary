@@ -15,7 +15,22 @@
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Image)
+            @{
+                string src = (Model.Image !=null) ?
+                    "data:image/jpeg;base64," + Convert.ToBase64String(Model.Image) :
+                    "";
+        
+            }
+
+            @if (src == "")
+            {
+                <img style="width:100px;height:150px" src=~/Resources/NoPhoto.png ) />
+            }
+            else
+            {
+                <img style="width:100px;height:150px" src="@src" ) />
+            }
+            <br />
         </dd>
 
         <dt>
