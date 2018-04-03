@@ -24,15 +24,8 @@ namespace Domain.Repositories
             }
             else
             {
-                var queryable = context.Set<TEntity>().AsQueryable();
-                foreach (var property in typeof(TEntity).GetProperties())
-                {
-                    if (property.GetGetMethod().ReturnType.BaseType == typeof(BaseEntity) || property.GetGetMethod().IsVirtual)
-                    {
-                        queryable = queryable.Include(property.Name);
-                    }
-                }
-                return queryable.FirstOrDefault(x => x.Id == id);
+                
+                return GetQueryable().FirstOrDefault(x => x.Id == id);
             }
         }
 
@@ -69,7 +62,7 @@ namespace Domain.Repositories
 
         public virtual IQueryable<TEntity> GetAll()
         {
-            return context.Set<TEntity>().AsQueryable();
+            return GetQueryable();
         }
 
         protected void SaveChanges()
@@ -81,6 +74,20 @@ namespace Domain.Repositories
             where TOtherEntity : BaseEntity
         {
             context.Set<TOtherEntity>().RemoveRange(entities);
+        }
+
+        private IQueryable<TEntity> GetQueryable()
+        {
+            var queryable = context.Set<TEntity>().AsQueryable();
+            foreach (var property in typeof(TEntity).GetProperties())
+            {
+                if (property.GetGetMethod().ReturnType.BaseType == typeof(BaseEntity) || property.GetGetMethod().IsVirtual)
+                {
+                    queryable = queryable.Include(property.Name);
+                }
+            }
+
+            return queryable;
         }
     }
 }

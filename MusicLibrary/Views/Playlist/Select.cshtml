@@ -1,0 +1,37 @@
+﻿@model MusicLibrary.Models.PlaylistData
+@{
+    ViewBag.Title = "Select";
+}
+
+<h2>Select performers and genres that you like</h2>
+
+@using (Html.BeginForm("Generate", "Playlist"))
+{
+    <div class="form-horizontal">
+        <div class="form-group">
+            <label class="control-label col-md-2">Performers</label>
+            <select name="Performers" id="Performers" multiple>
+                @foreach (var performer in Model.SelectedPerformers)
+                {
+                    <option value="@performer.Id">@performer.Name</option>
+                }
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-md-2">Genres</label>
+            <select name="Genres" id="Genres" multiple>
+                @foreach (var genre in Model.SelectedGenres)
+                {
+                    <option value="@genre.Id">@genre.Name</option>
+                }
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Generate playlist" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}

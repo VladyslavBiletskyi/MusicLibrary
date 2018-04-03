@@ -157,9 +157,11 @@
     <Compile Include="Controllers\GenresController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PerformersController.cs" />
+    <Compile Include="Controllers\PlaylistController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\PlaylistData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -227,10 +229,11 @@
     <Content Include="Views\Compositions\Details.cshtml" />
     <Content Include="Views\Compositions\Edit.cshtml" />
     <Content Include="Views\Compositions\Delete.cshtml" />
+    <Content Include="Views\Playlist\Select.cshtml" />
+    <Content Include="Views\Playlist\Playlist.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
     <Folder Include="Views\BaseCrud\" />
   </ItemGroup>
   <ItemGroup>

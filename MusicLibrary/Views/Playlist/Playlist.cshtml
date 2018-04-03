@@ -1,0 +1,22 @@
+﻿@model IEnumerable<IGrouping<Domain.Entities.Performer, Domain.Entities.Composition>>
+@{
+    ViewBag.Title = "Playlist";
+}
+
+<h2>Playlist</h2>
+<div class="form-horizontal">
+@foreach (var group in Model)
+{
+        <div class="form-group">
+            @Html.ActionLink(group.Key.Name, "Details", "Performers", new { id = group.Key.Id}, new{ @class = "control-label col-md-2" })
+            @foreach (var composition in group)
+            {
+                @Html.ActionLink(composition.Name, "Details", "Compositions", new RouteValueDictionary { {"id", composition.Id} }, null)
+            }
+        </div>
+}
+</div>
+
+<div class="row">
+    @Html.ActionLink("Go Back", "Select", null, new Dictionary<string, object> { { "class", "btn btn-primary btn-lg" } })
+</div>
